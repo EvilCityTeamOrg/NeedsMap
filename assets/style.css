@@ -2,9 +2,42 @@
     --white: #ffffff;
     --light: #8FC1B5;
 }
+* {
+    box-sizing: border-box;
+}
 body {
     background-color: var(--white);
+    margin: 0px;
+    padding: 0px;
 }
-header {
+h1 {
+    margin: 0px;
+}
+.header {
     background-color: var(--light);
+    margin: 0px;
+    padding: 25px;
+    border-radius: 0px 0px 51px 51px;
+    color: var(--white);
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    align-content: space-around;
+    justify-content: space-between;
+    align-items: center;
+}
+html {
+    margin: 0px;
+    padding: 0px;
+}
+button {
+    padding: 20px;
+    padding-inline: 50px;
+    font-size: 3rem;
+    border: none;
+    border-radius: 100px;
+    margin-inline: 5px;
+}
+.invisible_link {
+    text-decoration: none;
 }

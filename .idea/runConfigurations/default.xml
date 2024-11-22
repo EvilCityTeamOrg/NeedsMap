@@ -1,0 +1,10 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="default" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="com.evilcity.needsmap.ServerStart" />
+    <module name="NeedsMap" />
+    <option name="PROGRAM_PARAMETERS" value="--sparkPath D:\denisJava\java\NeedsMap\assets" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

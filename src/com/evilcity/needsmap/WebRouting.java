@@ -10,5 +10,7 @@ public class WebRouting {
         port(80);
 
         staticFiles.externalLocation(ServerStart.getStringArgument("sparkPath"));
+
+        init();
     }
 }

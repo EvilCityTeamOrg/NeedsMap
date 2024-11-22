@@ -8,6 +8,10 @@ module NeedsMap {
     requires org.slf4j;
     requires spark.core;
     requires javax.servlet.api;
+    requires org.mongodb.bson.record.codec;
+    requires org.mongodb.bson;
+    requires org.mongodb.driver.sync.client;
+    requires org.mongodb.driver.core;
 
     provides SLF4JServiceProvider with com.evilcity.needsmap.log.SLF4JProvider;
 }

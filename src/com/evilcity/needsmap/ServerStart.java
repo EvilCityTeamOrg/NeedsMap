@@ -14,6 +14,7 @@ public class ServerStart {
         System.out.println(cli);
 
         Logger.onServerStart();
+        Database.onServerStart();
         WebRouting.onServerStart();
 
         path = getStringArgument("sparkPath");

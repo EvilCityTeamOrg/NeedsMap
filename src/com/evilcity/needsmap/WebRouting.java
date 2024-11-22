@@ -1,5 +1,6 @@
 package com.evilcity.needsmap;
 
+import com.evilcity.needsmap.entity.User;
 import spark.Request;
 import spark.Response;
 import spark.Route;
@@ -19,13 +20,28 @@ public class WebRouting {
 
         //staticFiles.externalLocation(ServerStart.getStringArgument("sparkPath"));
 
-        path("/assets", () -> {
-            get("/css", f("style.css"));
-        });
+        get("style.css", f("style.css"));
         get("/", f("index.html"));
+
+        path("/api", () -> {
+            path("/system", () -> {
+                path("/accounts", () -> {
+                    post("/reg", createUser);
+                });
+            });
+        });
 
         init();
     }
+
+    private static final Route createUser = (request, response) -> {
+        String username = request.queryParams("u");
+        String password = request.queryParams("p");
+        if (username == null) {halt(400, "DO NOT USE THIS AS API! 651098510");}
+        if (password == null) {halt(400, "DO NOT USE THIS AS API! 706044366");}
+        User.register(username, password);
+        return "DO NOT USE THIS AS API! 626911954";
+    };
 
 
     private static Route f(String path) {

@@ -5,6 +5,9 @@ import org.slf4j.Marker;
 
 import static com.evilcity.needsmap.ServerStart.cli;
 
+/**
+ * I have probably done something wrong here. I'm using SLF4J first time, but I don't want to hava billion libraries installed, so I will stick with this garbage
+ */
 public class Logger implements org.slf4j.Logger {
 
     private static boolean debug = true;
@@ -15,11 +18,11 @@ public class Logger implements org.slf4j.Logger {
 
 
     public static void onServerStart() {
-        debug = cli.containsKey("noDebug");
-        trace = cli.containsKey("noTrace");
-        info = cli.containsKey("noInfo");
-        warn = cli.containsKey("noWarn");
-        error = cli.containsKey("noError");
+        debug = !cli.containsKey("--noDebug");
+        trace = !cli.containsKey("--noTrace");
+        info = !cli.containsKey("--noInfo");
+        warn = !cli.containsKey("--noWarn");
+        error = !cli.containsKey("--noError");
     }
 
     private final String name;
@@ -29,11 +32,11 @@ public class Logger implements org.slf4j.Logger {
     }
 
     private void Log(String level, String text) {
-        if (level.equals("DEBUG") && debug) return;
-        if (level.equals("TRACE") && trace) return;
-        if (level.equals("INFO ") && info) return;
-        if (level.equals("WARN ") && warn) return;
-        if (level.equals("ERROR") && error) return;
+        if (level.equals("DEBUG") && !debug) return;
+        if (level.equals("TRACE") && !trace) return;
+        if (level.equals("INFO ") && !info) return;
+        if (level.equals("WARN ") && !warn) return;
+        if (level.equals("ERROR") && !error) return;
         System.out.println("[" + level + name + text);
     }
     private void Log(String level, String text, Object o) {
@@ -43,9 +46,13 @@ public class Logger implements org.slf4j.Logger {
         Log(level, text + " " + o + " " + o1);
     }
     private void Log(String level, String s, Object... objects) {
-        String str = s + " ";
+        String str = s + " | ";
         for (Object o : objects) {
-            str += o.toString() + " ";
+            if (o == null) {
+                str += "null ";
+                continue;
+            }
+            str += o + " ";
         }
         Log(level, str);
     }

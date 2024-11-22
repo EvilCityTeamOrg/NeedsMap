@@ -7,12 +7,16 @@ import java.util.HashMap;
 
 public class ServerStart {
     public static final HashMap<String, Object> cli = new HashMap<>();
+    public static String path;
     private static final org.slf4j.Logger log = LoggerFactory.getLogger("STARTER");
     public static void main(String[] args) {
         commandLineArgs(args);
+        System.out.println(cli);
 
         Logger.onServerStart();
         WebRouting.onServerStart();
+
+        path = getStringArgument("sparkPath");
 
         log.info("Started!");
     }

@@ -7,6 +7,7 @@ import org.slf4j.spi.SLF4JServiceProvider;
 module NeedsMap {
     requires org.slf4j;
     requires spark.core;
+    requires javax.servlet.api;
 
     provides SLF4JServiceProvider with com.evilcity.needsmap.log.SLF4JProvider;
 }

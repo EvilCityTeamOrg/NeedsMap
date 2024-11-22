@@ -19,6 +19,9 @@ public class WebRouting {
 
         //staticFiles.externalLocation(ServerStart.getStringArgument("sparkPath"));
 
+        path("/assets", () -> {
+            get("/css", f("style.css"));
+        });
         get("/", f("index.html"));
 
         init();

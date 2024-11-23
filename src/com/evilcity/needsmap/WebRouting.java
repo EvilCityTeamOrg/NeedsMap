@@ -34,10 +34,11 @@ public class WebRouting {
         get("/promo", f("promo.html"));
         get("/login", f("login.html", false));
         get("/register", f("reg.html", false));
-        get("/app.webmanifest", f("app.webmanifest"));
+        get("/app.webmanifest", f("app.webmanifest", "application/json"));
         get("/favicon-512x512.png", png("favicon-512x512.png"));
         get("/favicon-192x192.png", png("favicon-192x192.png"));
         get("/favicon.ico", f("favicon.ico", "image/x-icon"));
+        get("/health-check", (request, response) -> "ok!");
 
         path("/app", () -> {
             get("/home", f("app.html", true));

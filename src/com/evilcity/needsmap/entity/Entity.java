@@ -12,7 +12,7 @@ import java.util.List;
 import static com.evilcity.needsmap.Database.getDatabase;
 
 public abstract class Entity {
-    private Document raw;
+    protected Document raw;
 
     protected Entity(Document raw) {
         this.raw = raw;

@@ -1,6 +1,8 @@
 :root {
     --white: #ffffff;
     --light: #8FC1B5;
+
+    --map-you: #3c7bda;
 }
 * {
     box-sizing: border-box;
@@ -25,19 +27,33 @@ h1 {
     align-content: space-around;
     justify-content: space-between;
     align-items: center;
+    width: 100%;
 }
 html {
     margin: 0px;
     padding: 0px;
 }
 button {
-    padding: 20px;
-    padding-inline: 50px;
-    font-size: 3rem;
+    padding: 2vh;
+    padding-inline: 5vw;
+    font-size: x-large;
     border: none;
     border-radius: 100px;
     margin-inline: 5px;
 }
 .invisible_link {
     text-decoration: none;
+}
+input {
+    outline: none;
+    border: 1px solid var(--light);
+    border-radius: 100px;
+    padding: 15px;
+    margin: 5px;
+}
+.marker-class {
+    width: 3vw;
+    height: 3vw;
+    border-radius: 100%;
+    background-color: var(--map-you);
 }

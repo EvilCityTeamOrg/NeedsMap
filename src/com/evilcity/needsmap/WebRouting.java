@@ -1,6 +1,8 @@
 package com.evilcity.needsmap;
 
+import com.evilcity.needsmap.entity.MapObject;
 import com.evilcity.needsmap.entity.User;
+import com.mongodb.client.model.Filters;
 import spark.Request;
 import spark.Response;
 import spark.Route;
@@ -13,6 +15,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Scanner;
 
+import static com.evilcity.needsmap.Database.getDatabase;
 import static spark.Spark.*;
 
 public class WebRouting {
@@ -48,14 +51,45 @@ public class WebRouting {
                     post("/login", login);
                 });
                 path("/objects", () -> {
-
+                    post("/create", createObj);
+                    get("/get", getObj);
+                    delete("/:id", deleteObj);
                 });
             });
         });
 
         init();
     }
+    private static final Route getObj = (request, response) -> {
+        if (!authCheck(request, response)) {halt(401, "DO NOT USE THIS AS API! UNAUTHORIZED");}
+        MapObject[] objects = MapObject.fetch();
+        String str = "{\"result\":[";
 
+        for (MapObject object : objects) {
+            str += "{\"lon\":\"" + object.getLon() + "\",\"lat\":\"" + object.getLat() + "\", \"name\":\"" + object.getName() + "\",\"id\":\"" + object.getID() + "\"},";
+        }
+
+        str += "]}";
+
+        response.type("application/json");
+        return str.replace("},]}", "}]}");
+    };
+    private static final Route deleteObj = (request, response) -> {
+        if (!authCheck(request, response)) {halt(401, "DO NOT USE THIS AS API! UNAUTHORIZED");}
+        getDatabase().getCollection("objects").findOneAndDelete(Filters.eq("ID", request.params(":id")));
+        return "fine";
+    };
+    private static final Route createObj = (request, response) -> {
+        if (!authCheck(request, response)) {halt(401, "DO NOT USE THIS AS API! UNAUTHORIZED");}
+        String lon = request.queryParams("lon");
+        String lat = request.queryParams("lat");
+        String name = request.queryParams("name");
+        if (lon == null) {halt(400, "DO NOT USE THIS AS API! 819245346");}
+        if (lat == null) {halt(400, "DO NOT USE THIS AS API! 618774483");}
+        if (name == null) {halt(400, "DO NOT USE THIS AS API! 534565345");}
+        MapObject.register(lon, lat, name);
+        return "DO NOT USE THIS AS API! 584395849";
+    };
     private static final Route createUser = (request, response) -> {
         String username = request.queryParams("u");
         String password = request.queryParams("p");

@@ -3,6 +3,8 @@
     --light: #8FC1B5;
 
     --map-you: #3c7bda;
+    --map-target: #da3c3c;
+    --map-obj: #24e42e;
 }
 * {
     box-sizing: border-box;
@@ -56,6 +58,18 @@ input {
     height: 3vw;
     border-radius: 100%;
     background-color: var(--map-you);
+}
+.marker-class-2 {
+    width: 3vw;
+    height: 3vw;
+    border-radius: 100%;
+    background-color: var(--map-target);
+}
+.marker-class-3 {
+    width: 3vw;
+    height: 3vw;
+    border-radius: 100%;
+    background-color: var(--map-obj);
 }
 .inv {
     border: none;

@@ -26,10 +26,12 @@
         let pos = [37.588144, 55.733842];
         function gotPosition(position) {
             pos = [position.coords.longitude, position.coords.latitude];
+            initMap();
         }
 
         function errorWhileGettingPosition() {
             alert("Не удалось получить ваше расположение.");
+            initMap();
         }
 
         const options = {
@@ -38,10 +40,11 @@
             timeout: 27000,
         };
         const watchID = navigator.geolocation.watchPosition(gotPosition, errorWhileGettingPosition, options);
-
-        setTimeout(initMap, 2000);
+        let render = false;
 
         async function initMap() {
+            if (render) return;
+            render = true;
             // Промис `ymaps3.ready` будет зарезолвлен, когда загрузятся все компоненты основного модуля API
             await ymaps3.ready;
 
@@ -82,8 +85,41 @@
 
             map.addChild(marker);
 
-        }
+            fetch("../../api/system/objects/get")
+                .then((response) => {
+                    response.json().then((data) => {
+                        const { result } = data;
+                        console.log(data);
+                        for (let i = 0; i < result.length; i++) {
+                            const obj = result[i];
 
+                            const markerElement = document.createElement('div');
+                            markerElement.onclick = () => {
+                                SnackBar({
+                                    position: "tc",
+                                    width: "80vw",
+                                    message: obj.name
+                                });
+                                SnackBar({
+                                    position: "tc",
+                                    width: "80vw",
+                                    message: "<span onclick=\"fetch('../api/system/objects/" + obj.id + "', {method: 'DELETE'}).then((e) => {if (e.status == 200) {window.location.reload();} else {alert('Не удалось удалить метку');}})\">Нажмите сюда чтобы удалить метку</span>"
+                                });
+                            };
+                            markerElement.className = 'marker-class-3';
+
+                            const marker = new YMapMarker(
+                                {
+                                    coordinates: [obj.lon, obj.lat]
+                                },
+                                markerElement
+                            );
+
+                            map.addChild(marker);
+                        }
+                    })
+                })
+        }
         function onSelfpointPressed() {
             SnackBar({
                 position: "tc",

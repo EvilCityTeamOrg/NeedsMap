@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NeedsMap</title>
+    <link rel="stylesheet" type="text/css" href="../style.css" />
+    <link rel="manifest" href="/app.webmanifest" />
+</head>
+
+<body>
+    <div
+        style="display: flex; flex-direction: column; padding-inline: 15px; width: 100%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+        <h1 style="text-align: center;">Регестрация</h1>
+        <input type="text" placeholder="Имя пользователя" id="form1">
+        <input type="password" placeholder="Пароль" id="form2">
+        <button onclick="send();">Войти</button>
+    </div>
+
+    <script>
+        function send() {
+            query = "?u=" + document.getElementById("form1").value + "&p=" + document.getElementById("form2").value;
+            fetch("../api/system/accounts/reg" + query, {
+                method: "POST"
+            }).then((e) => {
+                if (e.status == 200) {
+                    window.location.reload();
+                } else {
+                    alert("Неверное имя пользователя или пароль.");
+                }
+            })
+        }
+    </script>
+</body>
+
+</html>

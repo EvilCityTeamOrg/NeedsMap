@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script crossorigin src="https://cdn.jsdelivr.net/npm/@babel/standalone@7/babel.min.js"></script>
+    <script src="https://api-maps.yandex.ru/v3/?apikey=07213e7b-0f7e-4898-95ea-b5e4a87842f3&lang=ru_RU"></script>
+    <title>NeedsMap</title>
+    <link rel="stylesheet" type="text/css" href="../style.css" />
+    <link rel="stylesheet" type="text/css" href="../snack/js-snackbar.min.css" />
+    <link rel="manifest" href="/app.webmanifest" />
+</head>
+
+<body>
+    <div id="map" style="width: 100vw; height: 90vh">
+
+    </div>
+    <div style="display: grid; grid-template-columns: 1fr; height: 10vh;">
+        <button class="inv" id="ddd">
+            Добавить метку
+        </button>
+    </div>
+    <script src="../snack/js-snackbar.min.js"></script>
+    <script type="module">
+        let pos = [37.588144, 55.733842];
+        let name = prompt("Какой продукт нужно купить?", "");
+        let $_marker;
+        SnackBar({
+            position: "tc",
+            width: "80vw",
+            message: "Перетащите метку на место покупки"
+        });
+        function gotPosition(position) {
+            pos = [position.coords.longitude, position.coords.latitude];
+        }
+
+        function errorWhileGettingPosition() {
+            alert("Не удалось получить ваше расположение.");
+        }
+
+        const options = {
+            enableHighAccuracy: true,
+            maximumAge: 30000,
+            timeout: 27000,
+        };
+        const watchID = navigator.geolocation.watchPosition(gotPosition, errorWhileGettingPosition, options);
+        let render = false;
+
+        setTimeout(initMap, 2000);
+
+        async function initMap() {
+            if (render) return;
+            render = true;
+            // Промис `ymaps3.ready` будет зарезолвлен, когда загрузятся все компоненты основного модуля API
+            await ymaps3.ready;
+
+            const { YMap, YMapDefaultSchemeLayer, YMapMarker, YMapDefaultFeaturesLayer } = ymaps3;
+
+            // Иницилиазируем карту
+            const map = new YMap(
+                // Передаём ссылку на HTMLElement контейнера
+                document.getElementById('map'),
+
+                // Передаём параметры инициализации карты
+                {
+                    location: {
+                        // Координаты центра карты
+                        center: pos,
+
+                        // Уровень масштабирования
+                        zoom: 17
+                    }
+                }
+            );
+
+            // Добавляем слой для отображения схематической карты
+            map.addChild(new YMapDefaultSchemeLayer());
+            map.addChild(new YMapDefaultFeaturesLayer());
+
+
+            const markerElement = document.createElement('div');
+            markerElement.onclick = onSelfpointPressed;
+            markerElement.className = 'marker-class';
+
+            const marker = new YMapMarker(
+                {
+                    coordinates: pos
+
+                },
+                markerElement
+            );
+
+            map.addChild(marker);
+
+            const _markerElement = document.createElement('div');
+            _markerElement.onclick = onSelfpointPressed;
+            _markerElement.className = 'marker-class-2';
+
+            $_marker = new YMapMarker(
+                {
+                    coordinates: [pos[0], pos[1] + 0.000005],
+                    draggable: true,
+                    mapFollowsOnDrag: true
+
+                },
+                _markerElement
+            );
+
+            map.addChild($_marker);
+        }
+
+        document.getElementById("ddd").onclick = () => {
+            let query = "?lon=" + $_marker.coordinates[0] + "&lat=" + $_marker.coordinates[1] + "&name=" + name;
+            fetch("../../api/system/objects/create" + query, {
+                method: "POST"
+            }).then((e) => {
+                if (e.status == 200) {
+                    window.location = "./home"
+                } else {
+                    alert("Неудалось создать метку");
+                }
+            })
+        };
+
+        function onSelfpointPressed() {
+            SnackBar({
+                position: "tc",
+                width: "80vw",
+                message: "Вы находитесь здесь"
+            });
+        }
+    </script>
+</body>
+
+</html>

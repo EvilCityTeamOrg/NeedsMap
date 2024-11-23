@@ -12,6 +12,7 @@ module NeedsMap {
     requires org.mongodb.bson;
     requires org.mongodb.driver.sync.client;
     requires org.mongodb.driver.core;
+    requires java.desktop;
 
     provides SLF4JServiceProvider with com.evilcity.needsmap.log.SLF4JProvider;
 }

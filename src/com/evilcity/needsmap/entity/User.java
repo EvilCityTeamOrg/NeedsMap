@@ -5,7 +5,6 @@ import org.bson.Document;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Stream;
 
 import static com.evilcity.needsmap.Database.getDatabase;
 
@@ -21,6 +20,14 @@ public class User extends Entity {
         }
         return users;
     }
+
+    public boolean comparePassword(String compareTo) {
+        return raw.getString("Password").equals(DataUtils.stringHash(compareTo));
+    }
+    public String getID() {
+        return raw.getString("ID");
+    }
+
     private static User convertSingle(List<Document> raw) {
         return raw.size() > 0 ? new User(raw.get(0)) : null;
     }
@@ -29,7 +36,7 @@ public class User extends Entity {
         return convertSingle(Entity.fetch("users", "id", id, 0, 1));
     }
     public static User fetchByUsername(String username) {
-        return convertSingle(Entity.fetch("users", "username", username, 0, 1));
+        return convertSingle(Entity.fetch("users", "Username", username, 0, 1));
     }
     public static User register(String username, String password) {
         Document d = new Document()

@@ -8,12 +8,20 @@
     <script src="https://api-maps.yandex.ru/v3/?apikey=07213e7b-0f7e-4898-95ea-b5e4a87842f3&lang=ru_RU"></script>
     <title>NeedsMap</title>
     <link rel="stylesheet" type="text/css" href="../style.css" />
+    <link rel="stylesheet" type="text/css" href="../snack/js-snackbar.min.css" />
+    <link rel="manifest" href="/app.webmanifest" />
 </head>
 
 <body>
     <div id="map" style="width: 100vw; height: 90vh">
 
     </div>
+    <div style="display: grid; grid-template-columns: 1fr; height: 10vh;">
+        <button class="inv" onclick="window.location = './add';">
+            +
+        </button>
+    </div>
+    <script src="../snack/js-snackbar.min.js"></script>
     <script type="module">
         let pos = [37.588144, 55.733842];
         function gotPosition(position) {
@@ -62,6 +70,7 @@
 
 
             const markerElement = document.createElement('div');
+            markerElement.onclick = onSelfpointPressed;
             markerElement.className = 'marker-class';
 
             const marker = new YMapMarker(
@@ -75,6 +84,13 @@
 
         }
 
+        function onSelfpointPressed() {
+            SnackBar({
+                position: "tc",
+                width: "80vw",
+                message: "Вы находитесь здесь"
+            });
+        }
     </script>
 </body>
 

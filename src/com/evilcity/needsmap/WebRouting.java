@@ -5,6 +5,10 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Scanner;
@@ -20,14 +24,21 @@ public class WebRouting {
 
         //staticFiles.externalLocation(ServerStart.getStringArgument("sparkPath"));
 
+        get("/snack/js-snackbar.min.js", f("js-snackbar.min.js", "application/javascript"));
+        get("/snack/js-snackbar.min.css", f("js-snackbar.min.css", "text/css"));
         get("style.css", f("style.css", "text/css"));
         get("/", r("/app", "/promo"));
         get("/promo", f("promo.html"));
         get("/login", f("login.html", false));
         get("/register", f("reg.html", false));
+        get("/app.webmanifest", f("app.webmanifest"));
+        get("/favicon-512x512.png", png("favicon-512x512.png"));
+        get("/favicon-192x192.png", png("favicon-192x192.png"));
+        get("/favicon.ico", f("favicon.ico", "image/x-icon"));
 
         path("/app", () -> {
             get("/home", f("app.html", true));
+            get("/add", f("add.html", true));
         });
 
         path("/api", () -> {
@@ -35,6 +46,9 @@ public class WebRouting {
                 path("/accounts", () -> {
                     post("/reg", createUser);
                     post("/login", login);
+                });
+                path("/objects", () -> {
+
                 });
             });
         });
@@ -77,6 +91,15 @@ public class WebRouting {
             putFile(path, response);
             // Return empty string for Spark (it just appends returned value, so it should be fine)
             return "";
+        };
+    }
+    private static Route png(String path) {
+        return (request, response) -> {
+            BufferedImage ans = ImageIO.read(new File(ServerStart.path + "/" + path));
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ImageIO.write(ans, "png", baos);
+            response.type("image/png");
+            return baos.toByteArray();
         };
     }
     private static void putFile(String path, Response response) throws IOException {

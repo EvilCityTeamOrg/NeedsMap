@@ -148,7 +148,7 @@ public class WebRouting {
     private static boolean authCheck(Request request, Response response) {
         // For anyone reading this:
         //   Session attributes located on server side unlike cookies
-        //   It is impossible to change session attributes
+        //   It is impossible to change session attributes from client side
         return request.session().attribute("user") != null;
     }
     private static Route f(String path, boolean authRequired) {
